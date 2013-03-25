@@ -29,10 +29,10 @@ func GetIconTheme() string {
 }
 
 func AppIcon(icon string) string {
-	return FindIcon(icon, "48x48")
+	return AppIconForSize(icon, "48x48")
 }
 
-func FindIcon(icon, size string) (filename string) {
+func AppIconForSize(icon, size string) (filename string) {
 	theme := GetIconTheme()
 	if theme != "" {
 		filename = FindIconHelper(icon, size, theme)
