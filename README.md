@@ -49,7 +49,7 @@ Want the absolute path of an application's icon?
 // this will return something like /usr/share/icons/hicolor/48x48/apps/firefox.png
 iconpath := freedesktop.AppIcon("firefox")
 // use a method like this for a different size
-smallicon := freedesktop.FindIcon("firefox", "32x32")
+smallicon := freedesktop.AppIconForSize("firefox", "32x32")
 ```
 
 This package is very much a work in progress and is being developed ad hoc as I find more things to implement.
