@@ -254,16 +254,28 @@ func GetInstalledApplications() *list.List {
 }
 
 func GetInstalledApplicationsWhere(f func (*DesktopEntry) bool) *list.List {
-	files := CollectFromData("applications/*.desktop")
-	applications := list.New()
+	return GetInstalledDesktopEntriesWhere(func (entry *DesktopEntry) bool {
+		return entry.Type == "Application" && f(entry)
+	})
+}
+
+func GetInstalledDesktopEntries() *list.List {
+	return GetInstalledDesktopEntriesWhere(func(entry *DesktopEntry) bool {
+		return true
+	})
+}
+
+func GetInstalledDesktopEntriesWhere(f func (*DesktopEntry) bool) *list.List {
+	files := GetAllData("applications/*.desktop")
+	entries := list.New()
 	for _, file := range files {
 		entry, err := ParseDesktopEntry(file)
-		if err != nil || entry.Type != "Application" || !f(entry) {
+		if err != nil || !f(entry) {
 			continue
 		}
-		applications.PushBack(entry)
+		entries.PushBack(entry)
 	}
-	return applications
+	return entries
 }
 
 func missingKeyError(key string) error {

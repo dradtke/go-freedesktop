@@ -10,6 +10,7 @@ import (
 
 var xdgData, xdgConfig, xdgIcons []string
 var currentLocale string
+var AppName string
 
 func init() {
 	usr, err := user.Current()
