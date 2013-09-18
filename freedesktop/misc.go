@@ -88,7 +88,7 @@ func getAll(dirs[]string, pattern string) []string {
 // Takes the name of a user directory, e.g. "music" or "pictures"
 // and returns its absolute path
 func GetUserDir(d string) (string, error) {
-	userDirs := GetAppConfig("user-dirs.dirs")
+	userDirs := GetConfig("user-dirs.dirs")
 	data, err := ioutil.ReadFile(userDirs)
 	if err != nil {
 		return "", err
