@@ -19,38 +19,39 @@ type DesktopEntry struct {
 	Name string
 	Type string
 	Exec string
-	URL string  // only required for Link entries
+	URL  string // only required for Link entries
 
-	NoDisplay bool
-	Hidden bool
-	Terminal bool
+	NoDisplay     bool
+	Hidden        bool
+	Terminal      bool
 	StartupNotify bool
 
-	Version string
-	GenericName string
-	Comment string
-	Icon string
-	OnlyShowIn []string ; NotShowIn []string
-	TryExec string
-	Path string
-	Actions []string
-	MimeType []string
-	Categories []string
-	Keywords []string
+	Version        string
+	GenericName    string
+	Comment        string
+	Icon           string
+	OnlyShowIn     []string
+	NotShowIn      []string
+	TryExec        string
+	Path           string
+	Actions        []string
+	MimeType       []string
+	Categories     []string
+	Keywords       []string
 	StartupWMClass string
 
 	File string // .desktop file
 }
 
 // Config files are maps from Group Header -> Key -> Value
-func ParseConfigFile(file string) (map[string] map[string] string, error) {
+func ParseConfigFile(file string) (map[string]map[string]string, error) {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
 
 	keyRegex, _ := regexp.Compile("[A-Za-z0-9-]+")
-	cfg := make(map[string] map[string] string)
+	cfg := make(map[string]map[string]string)
 	lines := strings.Split(string(data), "\n")
 	var header string
 	for _, line := range lines {
@@ -70,7 +71,7 @@ func ParseConfigFile(file string) (map[string] map[string] string, error) {
 				return nil, errors.New("invalid key: " + key)
 			}
 			if _, ok := cfg[header]; !ok {
-				cfg[header] = make(map[string] string)
+				cfg[header] = make(map[string]string)
 			}
 			cfg[header][key] = value
 		}
@@ -188,7 +189,7 @@ func DesktopEntryTypeIsValid(t string) bool {
 	return isValid
 }
 
-func GetLocalizedValue(cfg map[string] string, property string) string {
+func GetLocalizedValue(cfg map[string]string, property string) string {
 	localeRegex, _ := regexp.Compile("^(?P<lang>.+?)(?P<country>_.+?)?(?P<encoding>\\..+?)?(?P<modifier>@.+?)?$")
 	locale := localeRegex.FindStringSubmatch(currentLocale)
 	if locale == nil {
@@ -203,27 +204,27 @@ func GetLocalizedValue(cfg map[string] string, property string) string {
 
 	// test lang_COUNTRY@MODIFIER
 	if country != "" && modifier != "" {
-		if key, ok := cfg[property + "[" + lang + country + modifier + "]"]; ok {
+		if key, ok := cfg[property+"["+lang+country+modifier+"]"]; ok {
 			return key
 		}
 	}
 
 	// test lang_COUNTRY
 	if country != "" {
-		if key, ok := cfg[property + "[" + lang + country + "]"]; ok {
+		if key, ok := cfg[property+"["+lang+country+"]"]; ok {
 			return key
 		}
 	}
 
 	// test lang@MODIFIER
 	if modifier != "" {
-		if key, ok := cfg[property + "[" + lang + modifier + "]"]; ok {
+		if key, ok := cfg[property+"["+lang+modifier+"]"]; ok {
 			return key
 		}
 	}
 
 	// test lang
-	if key, ok := cfg[property + "[" + lang + "]"]; ok {
+	if key, ok := cfg[property+"["+lang+"]"]; ok {
 		return key
 	}
 
@@ -234,8 +235,8 @@ func GetLocalizedValue(cfg map[string] string, property string) string {
 // Given a config file group (e.g. "Desktop Entry"), returns a map
 // of its values keyed by localization. The default value uses the
 // empty string as a key
-func GetLocalizedKeys(cfg map[string] string, property string) map[string] string {
-	results := make(map[string] string)
+func GetLocalizedKeys(cfg map[string]string, property string) map[string]string {
+	results := make(map[string]string)
 	regex, _ := regexp.Compile(property + "\\[(.+)\\]")
 	for key, value := range cfg {
 		if key == property {
@@ -253,8 +254,8 @@ func GetInstalledApplications() *list.List {
 	})
 }
 
-func GetInstalledApplicationsWhere(f func (*DesktopEntry) bool) *list.List {
-	return GetInstalledDesktopEntriesWhere(func (entry *DesktopEntry) bool {
+func GetInstalledApplicationsWhere(f func(*DesktopEntry) bool) *list.List {
+	return GetInstalledDesktopEntriesWhere(func(entry *DesktopEntry) bool {
 		return entry.Type == "Application" && f(entry)
 	})
 }
@@ -265,7 +266,7 @@ func GetInstalledDesktopEntries() *list.List {
 	})
 }
 
-func GetInstalledDesktopEntriesWhere(f func (*DesktopEntry) bool) *list.List {
+func GetInstalledDesktopEntriesWhere(f func(*DesktopEntry) bool) *list.List {
 	files := GetAllData("applications/*.desktop")
 	entries := list.New()
 	for _, file := range files {
@@ -290,9 +291,10 @@ func splitMultiValue(value string) []string {
 
 func getBoolValue(value string) (bool, error) {
 	switch value {
-		case "true":  return true, nil
-		case "false": return false, nil
+	case "true":
+		return true, nil
+	case "false":
+		return false, nil
 	}
 	return false, errors.New("invalid boolean value: " + value)
 }
-

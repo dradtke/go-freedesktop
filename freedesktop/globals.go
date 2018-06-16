@@ -29,7 +29,7 @@ func init() {
 		xdgConfigDirs = "/etc/xdg"
 	}
 	xdgConfigDirsList := strings.Split(xdgConfigDirs, string(os.PathListSeparator))
-	xdgConfig = make([]string, len(xdgConfigDirsList) + 1)
+	xdgConfig = make([]string, len(xdgConfigDirsList)+1)
 	xdgConfig[0] = xdgConfigHome
 	for i, dir := range xdgConfigDirsList {
 		xdgConfig[i+1] = dir
@@ -44,8 +44,8 @@ func init() {
 		xdgDataDirs = "/usr/local/share/:/usr/share/"
 	}
 	xdgDataDirsList := strings.Split(xdgDataDirs, string(os.PathListSeparator))
-	xdgData = make([]string, len(xdgDataDirsList) + 1)
-	xdgIcons = make([]string, len(xdgDataDirsList) + 2)
+	xdgData = make([]string, len(xdgDataDirsList)+1)
+	xdgIcons = make([]string, len(xdgDataDirsList)+2)
 	xdgData[0] = xdgDataHome
 	xdgIcons[0] = path.Join(usr.HomeDir, ".icons")
 	for i, dir := range xdgDataDirsList {
