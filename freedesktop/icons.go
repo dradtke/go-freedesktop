@@ -14,16 +14,16 @@ var xdgIconExtensions []string = []string{".png", ".svg", ".xpm"}
 func GetIconTheme() string {
 	session := os.Getenv("DESKTOP_SESSION")
 	switch session {
-		case "gnome":
-			cmd := exec.Command("gsettings", "get", "org.gnome.desktop.interface", "icon-theme")
-			out, err := cmd.Output()
-			if err == nil {
-				return strings.Trim(string(out), "' \n")
-			}
-		case "kde":
-			// TODO: look up KDE icon theme
-			// ???: where is this setting stored?
-			// try looking more in ~/.kde4/share/config/kdeglobals
+	case "gnome":
+		cmd := exec.Command("gsettings", "get", "org.gnome.desktop.interface", "icon-theme")
+		out, err := cmd.Output()
+		if err == nil {
+			return strings.Trim(string(out), "' \n")
+		}
+	case "kde":
+		// TODO: look up KDE icon theme
+		// ???: where is this setting stored?
+		// try looking more in ~/.kde4/share/config/kdeglobals
 	}
 	return ""
 }
@@ -88,7 +88,7 @@ func LookupIcon(icon, size, theme string) string {
 			categoryDir := path.Join(sizeDir, category.Name())
 
 			for _, ext := range xdgIconExtensions {
-				file := path.Join(categoryDir, icon + ext)
+				file := path.Join(categoryDir, icon+ext)
 				if _, err := os.Stat(file); err == nil {
 					return file
 				}
@@ -102,7 +102,7 @@ func LookupIcon(icon, size, theme string) string {
 func LookupFallbackIcon(icon string) string {
 	for _, dir := range xdgIcons {
 		for _, ext := range xdgIconExtensions {
-			file := path.Join(dir, icon + ext)
+			file := path.Join(dir, icon+ext)
 			if _, err := os.Stat(file); err == nil {
 				return file
 			}

@@ -64,8 +64,8 @@ func get(dirs []string, file string) string {
 
 // Iterates through a directory list and collects all files matching
 // the given pattern
-func getAll(dirs[]string, pattern string) []string {
-	collection := make(map[string] bool)
+func getAll(dirs []string, pattern string) []string {
+	collection := make(map[string]bool)
 	for _, dir := range dirs {
 		matches, _ := filepath.Glob(path.Join(dir, pattern))
 		for _, match := range matches {
@@ -75,7 +75,8 @@ func getAll(dirs[]string, pattern string) []string {
 		}
 	}
 
-	results := make([]string, len(collection)); i := 0
+	results := make([]string, len(collection))
+	i := 0
 	for key, _ := range collection {
 		results[i] = key
 		i++
